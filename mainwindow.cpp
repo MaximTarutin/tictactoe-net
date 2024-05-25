@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_server, &QPushButton::clicked, this, &MainWindow::start_server);
     connect(ui->pushButton_client, &QPushButton::clicked, this, &MainWindow::connect_client_to_server);
-
 }
 
 MainWindow::~MainWindow()
