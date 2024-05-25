@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QInputDialog>
+#include <QMessageBox>
 #include "myserver.h"
 
 QT_BEGIN_NAMESPACE
