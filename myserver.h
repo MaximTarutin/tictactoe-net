@@ -15,8 +15,13 @@ public:
 
     void server_start();
 
+private slots:
+    void new_connection();
+    void end_connection();
+    void get_data();
 
-    QString my_ip_address();
+public:
+    QString         my_ip_address();
     QTcpSocket      *t_socket;
 };
 

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QTcpSocket>
 #include "myserver.h"
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +24,7 @@ public:
 private:
     Ui::MainWindow  *ui;
     MyServer        *t_server;
+    QTcpSocket      *t_socket;
 
     QString IPSERVER;
 
@@ -31,5 +33,7 @@ private:
 private slots:
     void start_server();
     void connect_client_to_server();
+signals:
+    void ip_server(QString ip);             // передаем сигнал ip сервера
 };
 #endif // MAINWINDOW_H
