@@ -10,8 +10,14 @@ MainWindow::MainWindow(QWidget *parent)
     t_server = new MyServer();
     t_socket = new QTcpSocket();
 
+    while (NAME_PLAYER=="")
+    {
+        NAME_PLAYER = QInputDialog::getText(this,"Имя","Как Ваше имя ?");
+    }
+
     connect(ui->pushButton_server, &QPushButton::clicked, this, &MainWindow::start_server);
-    connect(ui->pushButton_client, &QPushButton::clicked, this, &MainWindow::connect_client_to_server);
+    connect(ui->pushButton_client, &QPushButton::clicked, this, &MainWindow::start_client);
+    connect(t_socket, &QTcpSocket::connected, this, &MainWindow::begin_connect);
 
 }
 
@@ -44,11 +50,18 @@ void MainWindow::start_server()
 
 // ----------------------------------- Подключение клиента к серверу ----------------------
 
-void MainWindow::connect_client_to_server()
+void MainWindow::start_client()
 {
     IPSERVER = QInputDialog::getText(this,"ip адрес сервера","");
     emit ip_server(IPSERVER);
     t_socket->connectToHost(IPSERVER, 21111);              // Отправляем запрос на подключение к серверу
     ui->pushButton_server->hide();
     ui->pushButton_client->hide();
+}
+
+// ---------------------------------- Соединение установлено -----------------------------
+
+void MainWindow::begin_connect()
+{
+    ui->label->setText("Соединение установлено");
 }

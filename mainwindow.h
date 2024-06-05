@@ -27,12 +27,15 @@ private:
     QTcpSocket      *t_socket;
 
     QString IPSERVER;
+    QString NAME_PLAYER;
 
     void init();
 
 private slots:
     void start_server();
-    void connect_client_to_server();
+    void start_client();
+    void begin_connect();
+
 signals:
     void ip_server(QString ip);             // передаем сигнал ip сервера
 };
