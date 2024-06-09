@@ -103,6 +103,22 @@ void MainWindow::get_data()
     {
         qDebug() << str;
         ui->label->setText(str);
+        return;
+    }
+
+    qDebug() << "Сервер ответил" << num << str;
+
+    switch(num)
+    {
+    case 1: ui->pushButton_1->setDisabled(true); break;
+    case 2: ui->pushButton_2->setDisabled(true); break;
+    case 3: ui->pushButton_3->setDisabled(true); break;
+    case 4: ui->pushButton_4->setDisabled(true); break;
+    case 5: ui->pushButton_5->setDisabled(true); break;
+    case 6: ui->pushButton_6->setDisabled(true); break;
+    case 7: ui->pushButton_7->setDisabled(true); break;
+    case 8: ui->pushButton_8->setDisabled(true); break;
+    case 9: ui->pushButton_9->setDisabled(true); break;
     }
 }
 
