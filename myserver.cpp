@@ -32,8 +32,13 @@ void MyServer::server_start()
 
 void MyServer::new_connection()
 {
+    static int i=0;
+    i++;
+
     QTcpSocket* t_socket = this->nextPendingConnection();
 
+    clientura.append(t_socket);
+    qDebug() << i << &clientura[0];
     connect(t_socket, &QTcpSocket::disconnected, t_socket, &QTcpSocket::deleteLater);       // потеря соединения
     connect(t_socket, &QTcpSocket::readyRead, this, &MyServer::get_data);                   // получаем данные от клиента
 
@@ -54,16 +59,21 @@ void MyServer::get_data()
 {
     qDebug() << "прием";
     QTcpSocket* t_socket = (QTcpSocket*)sender();
+    //qDebug() << t_socket;
+
     QDataStream in(t_socket);
     in.setVersion(QDataStream::Qt_6_5);
     int num;
     QString str;
     in >> num >> str;
     qDebug() << num << str;
+    foreach (QTcpSocket *socket, clientura)
+    {
+        QDataStream out(socket);
+        out.setVersion(QDataStream::Qt_6_5);
+        out << num << str;
+    }
 
-    QDataStream out(t_socket);
-    out.setVersion(QDataStream::Qt_6_5);
-    out << num << str;
 }
 
 // --------------------------------- Определяем свой ip ---------------------------------

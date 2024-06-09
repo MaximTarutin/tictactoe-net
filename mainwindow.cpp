@@ -67,8 +67,8 @@ void MainWindow::start_server()
     delete select_dialog;
     ui->centralwidget->show();
     t_server = new MyServer(this);
-    QMessageBox::information(this, "Внимание!!!", "ip сервера: "+t_server->my_ip_address());
     t_server->server_start();
+    QMessageBox::information(this, "Внимание!!!", "ip сервера: "+t_server->my_ip_address());
     t_socket->connectToHost(t_server->my_ip_address(), 21111);
 }
 
@@ -110,15 +110,15 @@ void MainWindow::get_data()
 
     switch(num)
     {
-    case 1: ui->pushButton_1->setDisabled(true); break;
-    case 2: ui->pushButton_2->setDisabled(true); break;
-    case 3: ui->pushButton_3->setDisabled(true); break;
-    case 4: ui->pushButton_4->setDisabled(true); break;
-    case 5: ui->pushButton_5->setDisabled(true); break;
-    case 6: ui->pushButton_6->setDisabled(true); break;
-    case 7: ui->pushButton_7->setDisabled(true); break;
-    case 8: ui->pushButton_8->setDisabled(true); break;
-    case 9: ui->pushButton_9->setDisabled(true); break;
+    case 1: ui->pushButton_1->setDisabled(true); ui->pushButton_1->setText("o"); break;
+    case 2: ui->pushButton_2->setDisabled(true); ui->pushButton_2->setText("o"); break;
+    case 3: ui->pushButton_3->setDisabled(true); ui->pushButton_3->setText("o"); break;
+    case 4: ui->pushButton_4->setDisabled(true); ui->pushButton_4->setText("o"); break;
+    case 5: ui->pushButton_5->setDisabled(true); ui->pushButton_5->setText("o"); break;
+    case 6: ui->pushButton_6->setDisabled(true); ui->pushButton_6->setText("o"); break;
+    case 7: ui->pushButton_7->setDisabled(true); ui->pushButton_7->setText("o"); break;
+    case 8: ui->pushButton_8->setDisabled(true); ui->pushButton_8->setText("o"); break;
+    case 9: ui->pushButton_9->setDisabled(true); ui->pushButton_9->setText("o"); break;
     }
 }
 

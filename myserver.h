@@ -15,10 +15,15 @@ public:
 
     QString my_ip_address();                        // Получаем свой ip-адрес
     void    server_start();                         // Прослушиваем порт 21111
+    int i=0;
+    QList <QTcpSocket*> clientura;
 
 private slots:
     void new_connection();                          // новое соединение
     void get_data();                                // получаем данные от клиента
+
+// protected:
+//     void incomingConnection();
 };
 
 #endif // MYSERVER_H
