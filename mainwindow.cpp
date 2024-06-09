@@ -78,8 +78,8 @@ void MainWindow::start_client()
 {
     delete select_dialog;
     ui->centralwidget->show();
-    QString IPSERVER = QInputDialog::getText(this,"ip адрес сервера","");
-    t_socket->connectToHost(IPSERVER, 21111);              // Отправляем запрос на подключение к серверу
+    QString IPSERVER = QInputDialog::getText(this,"ip адрес сервера","");   // Вводим ip-адрес сервера
+    t_socket->connectToHost(IPSERVER, 21111);                               // Отправляем запрос на подключение к серверу
 }
 
 // -------------------------- Соединение установлено -------------------------------------

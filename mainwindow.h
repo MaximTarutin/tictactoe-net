@@ -24,10 +24,12 @@ public:
 
 private:
     Ui::MainWindow  *ui;
-    SelectDialog    *select_dialog = nullptr;
-    MyServer        *t_server = nullptr;
-    QTcpSocket      *t_socket = nullptr;
-    QString         PLAYER_NAME="";
+    SelectDialog    *select_dialog = nullptr;               // Диалог выбора сервер или клиент
+    MyServer        *t_server = nullptr;                    // Сервер
+    QTcpSocket      *t_socket = nullptr;                    // Сокет
+    QString         PLAYER_NAME="";                         // Имя игрока
+
+    void init();                                            // Инициализация поля
 
 private slots:
     void get_signal_select(QString s);                      // Получаем сигнал из диалога выбора (сервер или клиент)

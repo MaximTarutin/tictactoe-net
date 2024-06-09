@@ -47,10 +47,7 @@ void MyServer::new_connection()
 
     int num=0;
     QString str="Сервер ответил: Соединение установлено";
-
     out << num << str;
-
-    qDebug() << "Соединение установлено !!!";
 }
 
 // -------------------------------- Получаем данные и рассылаем всем игрокам -------------------------------
@@ -58,20 +55,20 @@ void MyServer::new_connection()
 void MyServer::get_data()
 {
     qDebug() << "прием";
-    QTcpSocket* t_socket = (QTcpSocket*)sender();
-    //qDebug() << t_socket;
+    QTcpSocket* t_socket = (QTcpSocket*)sender();   // Получаем объект сокета, который вызвал данный слот
 
     QDataStream in(t_socket);
     in.setVersion(QDataStream::Qt_6_5);
     int num;
     QString str;
-    in >> num >> str;
+    in >> num >> str;                           // получаем данные из сокета
     qDebug() << num << str;
-    foreach (QTcpSocket *socket, clientura)
+
+    foreach (QTcpSocket *socket, clientura)     // Проходим по списку подключенных сокетов
     {
         QDataStream out(socket);
         out.setVersion(QDataStream::Qt_6_5);
-        out << num << str;
+        out << num << str;                      // отправляем всем данные
     }
 
 }
