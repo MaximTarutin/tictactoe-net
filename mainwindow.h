@@ -35,6 +35,7 @@ private slots:
     void start_client();                                    // стартуем как клиент
     void slot_connected();                                  // соединение установлено
     void get_data();                                        // получение данных от сервера
-    void send_data();                                       // отправить данные на сервер
+    void send_data(int num);                                // отправить данные на сервер
+    void set_playing_field();                               // установить состояние клетки на поле
 };
 #endif // MAINWINDOW_H

@@ -1,3 +1,9 @@
+
+/***********************************************
+ *      Структура передачи и приема данных:    *
+ * номер клетки-значение клетки-активный игрок *
+ * *********************************************/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QInputDialog>
@@ -21,8 +27,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(select_dialog, &SelectDialog::select_signal, this, &MainWindow::get_signal_select); // получаем сигнал из диалога
     connect(t_socket, &QTcpSocket::connected, this, &MainWindow::slot_connected);               // соединились с сервером
     connect(t_socket, &QTcpSocket::readyRead, this, &MainWindow::get_data);                     // получаем данные от сервера
-    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::send_data);
-
+    connect(ui->pushButton_1, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_3, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_4, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_5, &QPushButton::clicked, this, &MainWindow::set_playing_field);     // выбираем клетку
+    connect(ui->pushButton_6, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_7, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(ui->pushButton_9, &QPushButton::clicked, this, &MainWindow::set_playing_field);
 }
 
 MainWindow::~MainWindow()
@@ -91,16 +104,59 @@ void MainWindow::get_data()
         qDebug() << str;
         ui->label->setText(str);
     }
-
 }
 
 // ------------------------ Отправка данных на сервер -----------------------------------
 
-void MainWindow::send_data()
+void MainWindow::send_data(int num)
 {
     QDataStream out(t_socket);
     out.setVersion(QDataStream::Qt_6_5);
-    int num=ui->lineEdit->text().toInt();
     QString str=PLAYER_NAME;
     out << num << str;
+}
+
+// ------------------------- Установитть состояние клетки на поле ------------------------
+
+void MainWindow::set_playing_field()
+{
+    int num;
+    if(QObject::sender()==ui->pushButton_1)
+    {
+        num=1;
+    }
+    if(QObject::sender()==ui->pushButton_2)
+    {
+        num=2;
+    }
+    if(QObject::sender()==ui->pushButton_3)
+    {
+        num=3;
+    }
+    if(QObject::sender()==ui->pushButton_4)
+    {
+        num=4;
+    }
+    if(QObject::sender()==ui->pushButton_5)
+    {
+        num=5;
+    }
+    if(QObject::sender()==ui->pushButton_6)
+    {
+        num=6;
+    }
+    if(QObject::sender()==ui->pushButton_7)
+    {
+        num=7;
+    }
+    if(QObject::sender()==ui->pushButton_8)
+    {
+        num=8;
+    }
+    if(QObject::sender()==ui->pushButton_9)
+    {
+        num=9;
+    }
+
+    send_data(num);
 }
