@@ -13,16 +13,12 @@ public:
     explicit MyServer(QObject *parent = nullptr);
     ~MyServer();
 
-    QString         my_ip_address();
-    void server_start();
-
-private:
-    quint16 m_nNextBlockSize;
-    void sendToClient(QTcpSocket* t_socket, int num, const QString& str);     // передаем данные клиенту
+    QString my_ip_address();                        // Получаем свой ip-адрес
+    void    server_start();                         // Прослушиваем порт 21111
 
 private slots:
-    void new_connection();                                          // новое соединение
-    void get_data();                                                // получаем данные от клиента
+    void new_connection();                          // новое соединение
+    void get_data();                                // получаем данные от клиента
 };
 
 #endif // MYSERVER_H

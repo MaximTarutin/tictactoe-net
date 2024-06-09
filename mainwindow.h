@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QTcpSocket>
 #include "myserver.h"
+#include "selectdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,24 +20,21 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow();    
 
 private:
     Ui::MainWindow  *ui;
-    MyServer        *t_server;
-    QTcpSocket      *t_socket;
-
-    QString IPSERVER;
-    QString NAME_PLAYER;
-
-    void init();
+    SelectDialog    *select_dialog = nullptr;
+    MyServer        *t_server = nullptr;
+    QTcpSocket      *t_socket = nullptr;
+    QString         PLAYER_NAME="";
 
 private slots:
-    void start_server();
-    void start_client();
-    void begin_connect();
-
-signals:
-    void ip_server(QString ip);             // передаем сигнал ip сервера
+    void get_signal_select(QString s);                      // Получаем сигнал из диалога выбора (сервер или клиент)
+    void start_server();                                    // стартуем как сервер
+    void start_client();                                    // стартуем как клиент
+    void slot_connected();                                  // соединение установлено
+    void get_data();                                        // получение данных от сервера
+    void send_data();                                       // отправить данные на сервер
 };
 #endif // MAINWINDOW_H
