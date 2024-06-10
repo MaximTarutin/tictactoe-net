@@ -28,8 +28,7 @@ private:
     MyServer        *t_server = nullptr;                    // Сервер
     QTcpSocket      *t_socket = nullptr;                    // Сокет
     QString         PLAYER_NAME="";                         // Имя игрока
-
-    void init();                                            // Инициализация поля
+    QString         ACTIVE_PLAYER="";                       // Активный игрок
 
 private slots:
     void get_signal_select(QString s);                      // Получаем сигнал из диалога выбора (сервер или клиент)

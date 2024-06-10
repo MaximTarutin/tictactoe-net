@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    srand(time(NULL));
     ui->setupUi(this);
     t_socket = new QTcpSocket(this);
     select_dialog = new SelectDialog(this);
@@ -99,26 +100,21 @@ void MainWindow::get_data()
     int num;
     QString str;
     in >> num >> str;
-    if(num==0)
-    {
-        qDebug() << str;
-        ui->label->setText(str);
-        return;
-    }
 
-    qDebug() << "Сервер ответил" << num << str;
+    ACTIVE_PLAYER = str;
 
+    if(num==100) exit(100);
     switch(num)
     {
-    case 1: ui->pushButton_1->setDisabled(true); ui->pushButton_1->setText("o"); break;
-    case 2: ui->pushButton_2->setDisabled(true); ui->pushButton_2->setText("o"); break;
-    case 3: ui->pushButton_3->setDisabled(true); ui->pushButton_3->setText("o"); break;
-    case 4: ui->pushButton_4->setDisabled(true); ui->pushButton_4->setText("o"); break;
-    case 5: ui->pushButton_5->setDisabled(true); ui->pushButton_5->setText("o"); break;
-    case 6: ui->pushButton_6->setDisabled(true); ui->pushButton_6->setText("o"); break;
-    case 7: ui->pushButton_7->setDisabled(true); ui->pushButton_7->setText("o"); break;
-    case 8: ui->pushButton_8->setDisabled(true); ui->pushButton_8->setText("o"); break;
-    case 9: ui->pushButton_9->setDisabled(true); ui->pushButton_9->setText("o"); break;
+        case 1: ui->pushButton_1->setDisabled(true); ui->pushButton_1->setText("o"); break;
+        case 2: ui->pushButton_2->setDisabled(true); ui->pushButton_2->setText("o"); break;
+        case 3: ui->pushButton_3->setDisabled(true); ui->pushButton_3->setText("o"); break;
+        case 4: ui->pushButton_4->setDisabled(true); ui->pushButton_4->setText("o"); break;
+        case 5: ui->pushButton_5->setDisabled(true); ui->pushButton_5->setText("o"); break;
+        case 6: ui->pushButton_6->setDisabled(true); ui->pushButton_6->setText("o"); break;
+        case 7: ui->pushButton_7->setDisabled(true); ui->pushButton_7->setText("o"); break;
+        case 8: ui->pushButton_8->setDisabled(true); ui->pushButton_8->setText("o"); break;
+        case 9: ui->pushButton_9->setDisabled(true); ui->pushButton_9->setText("o"); break;
     }
 }
 
@@ -126,10 +122,17 @@ void MainWindow::get_data()
 
 void MainWindow::send_data(int num)
 {
+    QString str;
     QDataStream out(t_socket);
     out.setVersion(QDataStream::Qt_6_5);
-    QString str=PLAYER_NAME;
-    out << num << str;
+    if(ACTIVE_PLAYER!=PLAYER_NAME)
+    {
+        return;
+    } else
+    {
+        if(PLAYER_NAME=="PLAYER_1") str="PLAYER_2"; else str="PLAYER_1";
+        out << num << str;
+    }
 }
 
 // ------------------------- Установитть состояние клетки на поле ------------------------

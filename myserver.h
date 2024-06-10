@@ -18,6 +18,10 @@ public:
     int i=0;
     QList <QTcpSocket*> clientura;
 
+private:
+    QString         ACTIVE_PLAYER="";                       // активный игрок
+    void init();                                            // Инициализация поля
+
 private slots:
     void new_connection();                          // новое соединение
     void get_data();                                // получаем данные от клиента
