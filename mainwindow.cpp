@@ -99,22 +99,42 @@ void MainWindow::get_data()
     in.setVersion(QDataStream::Qt_6_5);
     int num;
     QString str;
+    QString ox;             // Времянка
     in >> num >> str;
 
     ACTIVE_PLAYER = str;
+    if(ACTIVE_PLAYER=="PLAYER_1") ox="x"; else ox="0";
 
     if(num==100) exit(100);
     switch(num)
     {
-        case 1: ui->pushButton_1->setDisabled(true); ui->pushButton_1->setText("o"); break;
-        case 2: ui->pushButton_2->setDisabled(true); ui->pushButton_2->setText("o"); break;
-        case 3: ui->pushButton_3->setDisabled(true); ui->pushButton_3->setText("o"); break;
-        case 4: ui->pushButton_4->setDisabled(true); ui->pushButton_4->setText("o"); break;
-        case 5: ui->pushButton_5->setDisabled(true); ui->pushButton_5->setText("o"); break;
-        case 6: ui->pushButton_6->setDisabled(true); ui->pushButton_6->setText("o"); break;
-        case 7: ui->pushButton_7->setDisabled(true); ui->pushButton_7->setText("o"); break;
-        case 8: ui->pushButton_8->setDisabled(true); ui->pushButton_8->setText("o"); break;
-        case 9: ui->pushButton_9->setDisabled(true); ui->pushButton_9->setText("o"); break;
+        case 1: ui->pushButton_1->setDisabled(true);
+                ui->pushButton_1->setText(ox);
+                break;
+        case 2: ui->pushButton_2->setDisabled(true);
+                ui->pushButton_2->setText(ox);
+                break;
+        case 3: ui->pushButton_3->setDisabled(true);
+                ui->pushButton_3->setText(ox);
+                break;
+        case 4: ui->pushButton_4->setDisabled(true);
+                ui->pushButton_4->setText(ox);
+                break;
+        case 5: ui->pushButton_5->setDisabled(true);
+                ui->pushButton_5->setText(ox);
+                break;
+        case 6: ui->pushButton_6->setDisabled(true);
+                ui->pushButton_6->setText(ox);
+                break;
+        case 7: ui->pushButton_7->setDisabled(true);
+                ui->pushButton_7->setText(ox);
+                break;
+        case 8: ui->pushButton_8->setDisabled(true);
+                ui->pushButton_8->setText(ox);
+                break;
+        case 9: ui->pushButton_9->setDisabled(true);
+                ui->pushButton_9->setText(ox);
+                break;
     }
 }
 
