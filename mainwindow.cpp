@@ -16,7 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     srand(time(NULL));
     ui->setupUi(this);
     t_socket = new QTcpSocket(this);
+    //t_server = new MyServer(this);
     select_dialog = new SelectDialog(this);
+    information_message = new QMessageBox(this);
 
     select_dialog->setWindowFlag(Qt::FramelessWindowHint);
     select_dialog->move(this->width()/2-select_dialog->width()/2,
@@ -41,8 +43,41 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete information_message;
     delete t_server;
     delete ui;
+}
+
+// ----------------------------------- Инициализация поля ----------------------------------
+
+void MainWindow::init()
+{
+    for(int i=0; i<10; i++)
+    {
+        cell[i]=10;                     // приводим массив в первоначальное состояние
+    }
+    ui->pushButton_1->setText("");
+    ui->pushButton_2->setText("");
+    ui->pushButton_3->setText("");
+    ui->pushButton_4->setText("");
+    ui->pushButton_5->setText("");
+    ui->pushButton_6->setText("");
+    ui->pushButton_7->setText("");
+    ui->pushButton_8->setText("");
+    ui->pushButton_9->setText("");
+    ui->pushButton_1->setEnabled(true); // Очищаем поле
+    ui->pushButton_2->setEnabled(true);
+    ui->pushButton_3->setEnabled(true);
+    ui->pushButton_4->setEnabled(true);
+    ui->pushButton_5->setEnabled(true);
+    ui->pushButton_6->setEnabled(true);
+    ui->pushButton_7->setEnabled(true);
+    ui->pushButton_8->setEnabled(true);
+    ui->pushButton_9->setEnabled(true);
+
+    QDataStream out(t_socket);
+    out.setVersion(QDataStream::Qt_6_5);
+    out << 0 << "";
 }
 
 // --------------------------- Получаем сигнал из диалога выбора ---------------------------
@@ -79,7 +114,7 @@ void MainWindow::start_client()
 {
     delete select_dialog;
     ui->centralwidget->show();
-    QString IPSERVER = QInputDialog::getText(this,"ip адрес сервера","");   // Вводим ip-адрес сервера
+    IPSERVER = QInputDialog::getText(this,"ip адрес сервера","");           // Вводим ip-адрес сервера
     t_socket->connectToHost(IPSERVER, 21111);                               // Отправляем запрос на подключение к серверу
 }
 
@@ -88,7 +123,7 @@ void MainWindow::start_client()
 void MainWindow::slot_connected()
 
 {
-    ui->label->setText("Соединение установлено");
+
 }
 
 // ------------------------- Получение данных от сервера ---------------------------------
@@ -103,8 +138,29 @@ void MainWindow::get_data()
     in >> num >> str;
 
     ACTIVE_PLAYER = str;
-    if(ACTIVE_PLAYER=="PLAYER_1") ox="x"; else ox="0";
 
+    if(ACTIVE_PLAYER==PLAYER_NAME)
+    {
+        ui->label_info->setText("ВАШ ХОД !!!");
+    } else
+    {
+        ui->label_info->setText("Ход противника");
+    }
+
+    if(ACTIVE_PLAYER=="PLAYER_1")
+    {
+        ox="x";
+        cell[num]=1;
+    } else
+    {
+        cell[num]=2;
+        ox="0";
+    }
+    if(num==0)
+    {
+        information_message->hide();
+        return;
+    }
     if(num==100) exit(100);
     switch(num)
     {
@@ -136,6 +192,8 @@ void MainWindow::get_data()
                 ui->pushButton_9->setText(ox);
                 break;
     }
+
+        check_to_victory();
 }
 
 // ------------------------ Отправка данных на сервер -----------------------------------
@@ -159,43 +217,77 @@ void MainWindow::send_data(int num)
 
 void MainWindow::set_playing_field()
 {
-    int num;
+    int num1=0;
     if(QObject::sender()==ui->pushButton_1)
     {
-        num=1;
+        num1=1;
     }
     if(QObject::sender()==ui->pushButton_2)
     {
-        num=2;
+        num1=2;
     }
     if(QObject::sender()==ui->pushButton_3)
     {
-        num=3;
+        num1=3;
     }
     if(QObject::sender()==ui->pushButton_4)
     {
-        num=4;
+        num1=4;
     }
     if(QObject::sender()==ui->pushButton_5)
     {
-        num=5;
+        num1=5;
     }
     if(QObject::sender()==ui->pushButton_6)
     {
-        num=6;
+        num1=6;
     }
     if(QObject::sender()==ui->pushButton_7)
     {
-        num=7;
+        num1=7;
     }
     if(QObject::sender()==ui->pushButton_8)
     {
-        num=8;
+        num1=8;
     }
     if(QObject::sender()==ui->pushButton_9)
     {
-        num=9;
+        num1=9;
     }
+    send_data(num1);
+}
 
-    send_data(num);
+// --------------------------------- Проверка на победу --------------------------------
+
+void MainWindow::check_to_victory()
+{
+    int col1 = cell[1]+cell[2]+cell[3];
+    int col2 = cell[4]+cell[5]+cell[6];
+    int col3 = cell[7]+cell[8]+cell[9];
+    int row1 = cell[1]+cell[4]+cell[7];
+    int row2 = cell[2]+cell[5]+cell[8];
+    int row3 = cell[3]+cell[6]+cell[9];
+    int diag1 = cell[1]+cell[5]+cell[9];
+    int diag2 = cell[3]+cell[5]+cell[7];
+
+    if((col1==3)or(col2==3)or(col3==3)or
+       (row1==3)or(row2==3)or(row3==3)or
+        (diag1==3)or(diag2==3)) victory(2);
+
+    if((col1==6)or(col2==6)or(col3==6)or
+       (row1==6)or(row2==6)or(row3==6)or
+        (diag1==6)or(diag2==6)) victory(1);
+}
+
+// --------------------------------------- Победа ------------------------------------------
+
+void MainWindow::victory(int i)
+{
+    if(i==1) score_player_1++;
+        else score_player_2++;
+        information_message->setInformativeText("Победа !!!!");
+        information_message->setText("Победил игрок "+QString::number(i));
+        information_message->setModal(true);
+        information_message->exec();
+    init();
 }

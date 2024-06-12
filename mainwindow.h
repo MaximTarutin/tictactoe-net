@@ -29,6 +29,15 @@ private:
     QTcpSocket      *t_socket = nullptr;                    // Сокет
     QString         PLAYER_NAME="";                         // Имя игрока
     QString         ACTIVE_PLAYER="";                       // Активный игрок
+    QString         IPSERVER="";                            // адрес сервера
+    QMessageBox     *information_message = nullptr;         // информационное окно
+    int cell[10]={10,10,10,10,10,10,10,10,10,10};           // Клетки поля
+    int score_player_1=0;                                   // счет игрока 1
+    int score_player_2=0;                                   // счет игрока 2
+
+    void check_to_victory();                                // Проверка на победу
+    void victory(int i);                                    // Победа. i - номер победившего игрока
+    void init();                                            // инициализация поля
 
 private slots:
     void get_signal_select(QString s);                      // Получаем сигнал из диалога выбора (сервер или клиент)
