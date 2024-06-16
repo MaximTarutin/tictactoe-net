@@ -59,7 +59,15 @@ void MainWindow::init()
     if(VICTORY_PLAYER=="Игрок 1")
     {
         window_victory->setText("Победил игрок 1");
-    } else window_victory->setText("Победил игрок 2");
+    }
+    if(VICTORY_PLAYER=="Игрок 2")
+    {
+        window_victory->setText("Победил игрок 2");
+    }
+    if(VICTORY_PLAYER=="Ничья")
+    {
+       window_victory->setText("Победила дружба");
+    }
     window_victory->show();
     timer_victory->start(5000);
 }
@@ -69,6 +77,7 @@ void MainWindow::init()
 void MainWindow::label_victory_hide()
 {
     window_victory->hide();
+    timer_victory->stop();
 
     for(int i=0; i<10; i++)
     {
@@ -207,7 +216,6 @@ void MainWindow::get_data()
                 ui->pushButton_9->setText(ox);
                 break;
     }
-
         check_to_victory();
 }
 
@@ -287,11 +295,28 @@ void MainWindow::check_to_victory()
 
     if((col1==3)or(col2==3)or(col3==3)or
        (row1==3)or(row2==3)or(row3==3)or
-        (diag1==3)or(diag2==3)) victory(2);
+        (diag1==3)or(diag2==3))
+    {
+        victory(2);
+        return;
+    }
 
     if((col1==6)or(col2==6)or(col3==6)or
        (row1==6)or(row2==6)or(row3==6)or
-        (diag1==6)or(diag2==6)) victory(1);
+        (diag1==6)or(diag2==6))
+    {
+        victory(1);
+        return;
+    }
+
+    for(int i=1; i<=9; i++)                     // Проверка на ничью
+    {
+        if(cell[i]==10)
+        {
+            return;
+        }
+    }
+    victory(3);
 }
 
 // --------------------------------------- Победа ------------------------------------------
@@ -303,10 +328,14 @@ void MainWindow::victory(int i)
         score_player_1++;
         VICTORY_PLAYER="Игрок 1";
     }
-    else
+    if(i==2)
     {
         score_player_2++;
         VICTORY_PLAYER="Игрок 2";
+    }
+    if(i==3)
+    {
+        VICTORY_PLAYER="Ничья";
     }
 
     ui->pushButton_1->setEnabled(false);
