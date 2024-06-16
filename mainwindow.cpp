@@ -16,9 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     srand(time(NULL));
     ui->setupUi(this);
     t_socket = new QTcpSocket(this);
-    //t_server = new MyServer(this);
     select_dialog = new SelectDialog(this);
-    information_message = new QMessageBox(this);
+    window_victory = new QLabel(this);
+    timer_victory = new QTimer(this);
 
     select_dialog->setWindowFlag(Qt::FramelessWindowHint);
     select_dialog->move(this->width()/2-select_dialog->width()/2,
@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
     select_dialog->show();
 
     connect(select_dialog, &SelectDialog::select_signal, this, &MainWindow::get_signal_select); // получаем сигнал из диалога
-    connect(t_socket, &QTcpSocket::connected, this, &MainWindow::slot_connected);               // соединились с сервером
     connect(t_socket, &QTcpSocket::readyRead, this, &MainWindow::get_data);                     // получаем данные от сервера
+
     connect(ui->pushButton_1, &QPushButton::clicked, this, &MainWindow::set_playing_field);
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::set_playing_field);
     connect(ui->pushButton_3, &QPushButton::clicked, this, &MainWindow::set_playing_field);
@@ -39,12 +39,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_7, &QPushButton::clicked, this, &MainWindow::set_playing_field);
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::set_playing_field);
     connect(ui->pushButton_9, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+
+    connect(timer_victory, &QTimer::timeout, this, &MainWindow::label_victory_hide);
 }
 
 MainWindow::~MainWindow()
 {
-    delete information_message;
     delete t_server;
+    delete window_victory;
+    delete timer_victory;
+    delete select_dialog;
     delete ui;
 }
 
@@ -52,6 +56,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
+    if(VICTORY_PLAYER=="Игрок 1")
+    {
+        window_victory->setText("Победил игрок 1");
+    } else window_victory->setText("Победил игрок 2");
+    window_victory->show();
+    timer_victory->start(5000);
+}
+
+// ------------------------ Выводим сообщение о победе или поражении -----------------------
+
+void MainWindow::label_victory_hide()
+{
+    window_victory->hide();
+
     for(int i=0; i<10; i++)
     {
         cell[i]=10;                     // приводим массив в первоначальное состояние
@@ -74,10 +92,6 @@ void MainWindow::init()
     ui->pushButton_7->setEnabled(true);
     ui->pushButton_8->setEnabled(true);
     ui->pushButton_9->setEnabled(true);
-
-    QDataStream out(t_socket);
-    out.setVersion(QDataStream::Qt_6_5);
-    out << 0 << "";
 }
 
 // --------------------------- Получаем сигнал из диалога выбора ---------------------------
@@ -118,14 +132,6 @@ void MainWindow::start_client()
     t_socket->connectToHost(IPSERVER, 21111);                               // Отправляем запрос на подключение к серверу
 }
 
-// -------------------------- Соединение установлено -------------------------------------
-
-void MainWindow::slot_connected()
-
-{
-
-}
-
 // ------------------------- Получение данных от сервера ---------------------------------
 
 void MainWindow::get_data()
@@ -136,6 +142,21 @@ void MainWindow::get_data()
     QString str;
     QString ox;             // Времянка
     in >> num >> str;
+
+    if(num==200)
+    {
+        ACTIVE_PLAYER = str;                    // Новая игра
+        init();
+        if(ACTIVE_PLAYER==PLAYER_NAME)
+        {
+            ui->label_info->setText("ВАШ ХОД !!!");
+        } else
+        {
+            ui->label_info->setText("Ход противника");
+        }
+        qDebug() << "Новая игра, ходит: " << str;
+        return;
+    }
 
     ACTIVE_PLAYER = str;
 
@@ -156,12 +177,6 @@ void MainWindow::get_data()
         cell[num]=2;
         ox="0";
     }
-    if(num==0)
-    {
-        information_message->hide();
-        return;
-    }
-    if(num==100) exit(100);
     switch(num)
     {
         case 1: ui->pushButton_1->setDisabled(true);
@@ -264,7 +279,7 @@ void MainWindow::check_to_victory()
     int col1 = cell[1]+cell[2]+cell[3];
     int col2 = cell[4]+cell[5]+cell[6];
     int col3 = cell[7]+cell[8]+cell[9];
-    int row1 = cell[1]+cell[4]+cell[7];
+    int row1 = cell[1]+cell[4]+cell[7];         // Возможные комбинации выигрыша
     int row2 = cell[2]+cell[5]+cell[8];
     int row3 = cell[3]+cell[6]+cell[9];
     int diag1 = cell[1]+cell[5]+cell[9];
@@ -283,11 +298,26 @@ void MainWindow::check_to_victory()
 
 void MainWindow::victory(int i)
 {
-    if(i==1) score_player_1++;
-        else score_player_2++;
-        information_message->setInformativeText("Победа !!!!");
-        information_message->setText("Победил игрок "+QString::number(i));
-        information_message->setModal(true);
-        information_message->exec();
-    init();
+    if(i==1)
+    {
+        score_player_1++;
+        VICTORY_PLAYER="Игрок 1";
+    }
+    else
+    {
+        score_player_2++;
+        VICTORY_PLAYER="Игрок 2";
+    }
+
+    ui->pushButton_1->setEnabled(false);
+    ui->pushButton_2->setEnabled(false);
+    ui->pushButton_3->setEnabled(false);
+    ui->pushButton_4->setEnabled(false);
+    ui->pushButton_5->setEnabled(false);
+    ui->pushButton_6->setEnabled(false);
+    ui->pushButton_7->setEnabled(false);
+    ui->pushButton_8->setEnabled(false);
+    ui->pushButton_9->setEnabled(false);
+
+    send_data(200);
 }

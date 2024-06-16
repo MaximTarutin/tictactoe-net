@@ -78,15 +78,15 @@ void MyServer::get_data()
     in >> num >> str;                           // получаем данные из сокета
     qDebug() << num << "Активный" << str;
 
-    // if(num==0)
-    // {
-    //     int perviy_hod = rand()%2+0;            // случайно выбираем кто ходит первый
-    //     if (perviy_hod==1)                      // Первым ходит компьютер
-    //     {
-    //         str = "PLAYER_1";
-    //     } else str = "PLAYER_2";
-    //     qDebug() << "Новый активный игрок: " << str;
-    // }
+    if(num==200)
+    {   //exit(22);
+        int perviy_hod = rand()%2+0;            // случайно выбираем кто ходит первый
+        if (perviy_hod==1)                      // Первым ходит компьютер
+        {
+            str = "PLAYER_1";
+        } else str = "PLAYER_2";
+        qDebug() << "Новый активный игрок: " << str;
+    }
 
     foreach (QTcpSocket *socket, clientura)     // Проходим по списку подключенных сокетов
     {
