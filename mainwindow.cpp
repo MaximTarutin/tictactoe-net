@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->centralwidget->hide();
     select_dialog->show();
 
+    ui->label_score_1->setText(QString::number(score_player_1));
+    ui->label_score_2->setText(QString::number(score_player_2));
+
     connect(select_dialog, &SelectDialog::select_signal, this, &MainWindow::get_signal_select); // получаем сигнал из диалога
     connect(t_socket, &QTcpSocket::readyRead, this, &MainWindow::get_data);                     // получаем данные от сервера
 
@@ -347,6 +350,9 @@ void MainWindow::victory(int i)
     ui->pushButton_7->setEnabled(false);
     ui->pushButton_8->setEnabled(false);
     ui->pushButton_9->setEnabled(false);
+
+    ui->label_score_1->setText(QString::number(score_player_1));
+    ui->label_score_2->setText(QString::number(score_player_2));
 
     send_data(200);
 }
