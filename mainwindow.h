@@ -7,6 +7,8 @@
 #include <QTcpSocket>
 #include <QLabel>
 #include <QTimer>
+#include <QPushButton>
+#include <QMovie>
 #include "myserver.h"
 #include "selectdialog.h"
 
@@ -35,6 +37,26 @@ private:
     QString         IPSERVER="";                            // адрес сервера
     QLabel          *window_victory=nullptr;                // окно победы или поражения
     QTimer          *timer_victory=nullptr;                 // таймер показа окна победы
+
+    QPushButton     *pushButton_1=nullptr;
+    QPushButton     *pushButton_2=nullptr;
+    QPushButton     *pushButton_3=nullptr;
+    QPushButton     *pushButton_4=nullptr;
+    QPushButton     *pushButton_5=nullptr;                          // Ячейки поля
+    QPushButton     *pushButton_6=nullptr;
+    QPushButton     *pushButton_7=nullptr;
+    QPushButton     *pushButton_8=nullptr;
+    QPushButton     *pushButton_9=nullptr;
+
+    QMovie          *movie_blue_ballon=nullptr;
+    QMovie          *movie_green_ballon=nullptr;
+    QMovie          *movie_sun=nullptr;
+    QLabel          *blue_ballon=nullptr;
+    QLabel          *green_ballon=nullptr;
+    QLabel          *sun=nullptr;
+
+    QLabel          *label_info=nullptr;                            // информация чей ход
+
     int cell[10]={10,10,10,10,10,10,10,10,10,10};           // Клетки поля
     int score_player_1=0;                                   // счет игрока 1
     int score_player_2=0;                                   // счет игрока 2
@@ -42,6 +64,8 @@ private:
     void check_to_victory();                                // Проверка на победу
     void victory(int i);                                    // Победа. i - номер победившего игрока
     void init();                                            // инициализация поля
+    int Screen_Width();                                     // возвращает ширину экрана
+    int Screen_Height();                                    // возвращает высоту экрана
 
 private slots:
     void get_signal_select(QString s);                      // Получаем сигнал из диалога выбора (сервер или клиент)
@@ -51,5 +75,6 @@ private slots:
     void send_data(int num);                                // отправить данные на сервер
     void set_playing_field();                               // установить состояние клетки на поле
     void label_victory_hide();                              // скрыть сообщение о победе по истичении таймера
+    void show_field();                                      // прорисовка поля
 };
 #endif // MAINWINDOW_H

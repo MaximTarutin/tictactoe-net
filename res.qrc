@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/blue-balloon-t.gif</file>
+        <file>res/borboletas-butterflies.gif</file>
+        <file>res/butterfly-freedom.gif</file>
+        <file>res/fone.jpg</file>
+        <file>res/green-balloon.gif</file>
+        <file>res/soleil-sunshine.gif</file>
+        <file>res/prosrach.png</file>
+    </qresource>
+</RCC>

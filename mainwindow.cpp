@@ -8,42 +8,59 @@
 #include "ui_mainwindow.h"
 #include <QInputDialog>
 #include <QDataStream>
+#include <QScreen>
+#include <QList>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     srand(time(NULL));
+
     ui->setupUi(this);
+
     t_socket = new QTcpSocket(this);
     select_dialog = new SelectDialog(this);
     window_victory = new QLabel(this);
     timer_victory = new QTimer(this);
 
-    select_dialog->setWindowFlag(Qt::FramelessWindowHint);
-    select_dialog->move(this->width()/2-select_dialog->width()/2,
-                        this->height()/2-select_dialog->height()/2);
+    pushButton_1 = new QPushButton(this);
+    pushButton_2 = new QPushButton(this);
+    pushButton_3 = new QPushButton(this);
+    pushButton_4 = new QPushButton(this);
+    pushButton_5 = new QPushButton(this);
+    pushButton_6 = new QPushButton(this);
+    pushButton_7 = new QPushButton(this);
+    pushButton_8 = new QPushButton(this);
+    pushButton_9 = new QPushButton(this);
 
-    ui->centralwidget->hide();
-    select_dialog->show();
+    movie_blue_ballon = new QMovie(":/res/blue-balloon-t.gif");
+    blue_ballon = new QLabel(this);
+    movie_green_ballon = new QMovie(":/res/green-balloon.gif");
+    green_ballon = new QLabel(this);
+    movie_sun = new QMovie(":/res/soleil-sunshine.gif");
+    sun = new QLabel(this);
+    label_info = new QLabel(this);
 
-    ui->label_score_1->setText(QString::number(score_player_1));
-    ui->label_score_2->setText(QString::number(score_player_2));
+    show_field();
 
     connect(select_dialog, &SelectDialog::select_signal, this, &MainWindow::get_signal_select); // получаем сигнал из диалога
     connect(t_socket, &QTcpSocket::readyRead, this, &MainWindow::get_data);                     // получаем данные от сервера
 
-    connect(ui->pushButton_1, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_3, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_4, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_5, &QPushButton::clicked, this, &MainWindow::set_playing_field);     // выбираем клетку
-    connect(ui->pushButton_6, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_7, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-    connect(ui->pushButton_9, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_1, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_2, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_3, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_4, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_5, &QPushButton::clicked, this, &MainWindow::set_playing_field);     // выбираем клетку
+    connect(pushButton_6, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_7, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_8, &QPushButton::clicked, this, &MainWindow::set_playing_field);
+    connect(pushButton_9, &QPushButton::clicked, this, &MainWindow::set_playing_field);
 
     connect(timer_victory, &QTimer::timeout, this, &MainWindow::label_victory_hide);
+
+    qDebug() << Screen_Width() << "x" << Screen_Height();
+
 }
 
 MainWindow::~MainWindow()
@@ -52,7 +69,143 @@ MainWindow::~MainWindow()
     delete window_victory;
     delete timer_victory;
     delete select_dialog;
+    delete pushButton_1;
+    delete pushButton_2;
+    delete pushButton_3;
+    delete pushButton_4;
+    delete pushButton_5;
+    delete pushButton_6;
+    delete pushButton_7;
+    delete pushButton_8;
+    delete pushButton_9;
+    delete label_info;
+    delete movie_blue_ballon;
+    delete blue_ballon;
+    delete movie_green_ballon;
+    delete green_ballon;
     delete ui;
+}
+
+//------------------- Ширина экрана ------------------------------
+
+int MainWindow::Screen_Width()
+{
+    QScreen *screen = QApplication::screens().at(0);
+    int _width_ = screen->size().width();
+    return(_width_);
+}
+
+
+//------------------- Высота экрана ------------------------------
+
+int MainWindow::Screen_Height()
+{
+    QScreen *screen = QApplication::screens().at(0);
+    int _heighrt_ = screen->size().height();
+    return(_heighrt_);
+}
+
+// ------------------------- Прорисовка поля -------------------------
+
+void MainWindow::show_field()
+{
+    centralWidget()->setStyleSheet("border-image: url(:/res/fone.jpg);");           // ставим фон
+    setStyleSheet( "QMessageBox{border-image: url(:/res/prosrach.png);}"
+                  "QInputDialog {border-image: url(:/res/prosrach.png);};");
+    select_dialog->setWindowFlag(Qt::FramelessWindowHint);
+    select_dialog->move(this->width()/2-select_dialog->width()/2,
+                        this->height()/2-select_dialog->height()/2);
+    select_dialog->setStyleSheet("border-image: url(:/res/prosrach.png);");
+
+    ui->centralwidget->hide();
+    select_dialog->show();
+
+    ui->label_score_1->setStyleSheet("border-image: url(:/res/prosrach.png); "
+                                     "background-color: yellow;");
+    ui->label_score_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                     "background-color: yellow;");
+    pushButton_1->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_3->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_4->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_5->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_6->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_7->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_8->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    pushButton_9->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                    "background-color: pink;");
+    ui->label_info->setStyleSheet("border-image: url(:/res/prosrach.png);");
+
+    pushButton_1->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_2->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_3->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_4->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_5->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_6->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_7->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_8->resize(Screen_Width()/20, Screen_Height()/10);
+    pushButton_9->resize(Screen_Width()/20, Screen_Height()/10);
+
+    int x1 = Screen_Width()/2-pushButton_1->width()-pushButton_1->width()/2;
+    int y1 = Screen_Height()/2-pushButton_1->height()-pushButton_1->height()/2;
+    int x2 = x1+pushButton_2->width()+10;
+    int y2 = y1+pushButton_2->height()+10;
+    int x3 = x2+pushButton_2->width()+10;
+    int y3 = y2+pushButton_2->height()+10;
+
+    pushButton_1->move(x1,y1);
+    pushButton_2->move(x2,y1);
+    pushButton_3->move(x3,y1);
+    pushButton_4->move(x1,y2);
+    pushButton_5->move(x2,y2);                                  // игровое поле
+    pushButton_6->move(x3,y2);
+    pushButton_7->move(x1,y3);
+    pushButton_8->move(x2,y3);
+    pushButton_9->move(x3,y3);
+
+    ui->label_score_1->setText(QString::number(score_player_1));
+    ui->label_score_2->setText(QString::number(score_player_2));
+
+    int w = Screen_Width()/30;
+    int h = Screen_Height()/7;
+
+    blue_ballon->setMovie(movie_blue_ballon);
+    movie_blue_ballon->start();
+    blue_ballon->resize(w, h);                                // Синий шарик
+    movie_blue_ballon->setScaledSize(QSize(w,h));
+    blue_ballon->move(x1-w*2,y1);
+
+    green_ballon->setMovie(movie_green_ballon);
+    movie_green_ballon->start();
+    green_ballon->resize(w,h);                                // Зеленый шарик
+    movie_green_ballon->setScaledSize(QSize(w,h));
+    green_ballon->move(x3+w*2+w/2,y1);
+
+    int w_s = Screen_Width()/20;
+    int h_s = Screen_Height()/30;
+    int x_s = blue_ballon->x()-w_s/4;
+    int y_s = blue_ballon->y()+blue_ballon->height()+40;
+    int x1_s = green_ballon->x()-w_s/4;
+    int y1_s = green_ballon->y()+green_ballon->height()+40;
+
+    ui->label_score_1->move(x_s, y_s);
+    ui->label_score_1->resize(w_s, h_s);
+    ui->label_score_2->move(x1_s, y1_s);
+    ui->label_score_2->resize(w_s, h_s);
+
+    sun->setMovie(movie_sun);
+    movie_sun->start();
+    movie_sun->setScaledSize(QSize(Screen_Width()/10, Screen_Height()/5));
+    sun->resize(Screen_Width()/10, Screen_Height()/5);
+    sun->move(Screen_Width()/25, Screen_Height()/25);
 }
 
 // ----------------------------------- Инициализация поля ----------------------------------
@@ -86,24 +239,24 @@ void MainWindow::label_victory_hide()
     {
         cell[i]=10;                     // приводим массив в первоначальное состояние
     }
-    ui->pushButton_1->setText("");
-    ui->pushButton_2->setText("");
-    ui->pushButton_3->setText("");
-    ui->pushButton_4->setText("");
-    ui->pushButton_5->setText("");
-    ui->pushButton_6->setText("");
-    ui->pushButton_7->setText("");
-    ui->pushButton_8->setText("");
-    ui->pushButton_9->setText("");
-    ui->pushButton_1->setEnabled(true); // Очищаем поле
-    ui->pushButton_2->setEnabled(true);
-    ui->pushButton_3->setEnabled(true);
-    ui->pushButton_4->setEnabled(true);
-    ui->pushButton_5->setEnabled(true);
-    ui->pushButton_6->setEnabled(true);
-    ui->pushButton_7->setEnabled(true);
-    ui->pushButton_8->setEnabled(true);
-    ui->pushButton_9->setEnabled(true);
+    pushButton_1->setText("");
+    pushButton_2->setText("");
+    pushButton_3->setText("");
+    pushButton_4->setText("");
+    pushButton_5->setText("");
+    pushButton_6->setText("");
+    pushButton_7->setText("");
+    pushButton_8->setText("");
+    pushButton_9->setText("");
+    pushButton_1->setEnabled(true); // Очищаем поле
+    pushButton_2->setEnabled(true);
+    pushButton_3->setEnabled(true);
+    pushButton_4->setEnabled(true);
+    pushButton_5->setEnabled(true);
+    pushButton_6->setEnabled(true);
+    pushButton_7->setEnabled(true);
+    pushButton_8->setEnabled(true);
+    pushButton_9->setEnabled(true);
 }
 
 // --------------------------- Получаем сигнал из диалога выбора ---------------------------
@@ -191,32 +344,32 @@ void MainWindow::get_data()
     }
     switch(num)
     {
-        case 1: ui->pushButton_1->setDisabled(true);
-                ui->pushButton_1->setText(ox);
+        case 1: pushButton_1->setDisabled(true);
+                pushButton_1->setText(ox);
                 break;
-        case 2: ui->pushButton_2->setDisabled(true);
-                ui->pushButton_2->setText(ox);
+        case 2: pushButton_2->setDisabled(true);
+                pushButton_2->setText(ox);
                 break;
-        case 3: ui->pushButton_3->setDisabled(true);
-                ui->pushButton_3->setText(ox);
+        case 3: pushButton_3->setDisabled(true);
+                pushButton_3->setText(ox);
                 break;
-        case 4: ui->pushButton_4->setDisabled(true);
-                ui->pushButton_4->setText(ox);
+        case 4: pushButton_4->setDisabled(true);
+                pushButton_4->setText(ox);
                 break;
-        case 5: ui->pushButton_5->setDisabled(true);
-                ui->pushButton_5->setText(ox);
+        case 5: pushButton_5->setDisabled(true);
+                pushButton_5->setText(ox);
                 break;
-        case 6: ui->pushButton_6->setDisabled(true);
-                ui->pushButton_6->setText(ox);
+        case 6: pushButton_6->setDisabled(true);
+                pushButton_6->setText(ox);
                 break;
-        case 7: ui->pushButton_7->setDisabled(true);
-                ui->pushButton_7->setText(ox);
+        case 7: pushButton_7->setDisabled(true);
+                pushButton_7->setText(ox);
                 break;
-        case 8: ui->pushButton_8->setDisabled(true);
-                ui->pushButton_8->setText(ox);
+        case 8: pushButton_8->setDisabled(true);
+                pushButton_8->setText(ox);
                 break;
-        case 9: ui->pushButton_9->setDisabled(true);
-                ui->pushButton_9->setText(ox);
+        case 9: pushButton_9->setDisabled(true);
+                pushButton_9->setText(ox);
                 break;
     }
         check_to_victory();
@@ -244,39 +397,39 @@ void MainWindow::send_data(int num)
 void MainWindow::set_playing_field()
 {
     int num1=0;
-    if(QObject::sender()==ui->pushButton_1)
+    if(QObject::sender()==pushButton_1)
     {
         num1=1;
     }
-    if(QObject::sender()==ui->pushButton_2)
+    if(QObject::sender()==pushButton_2)
     {
         num1=2;
     }
-    if(QObject::sender()==ui->pushButton_3)
+    if(QObject::sender()==pushButton_3)
     {
         num1=3;
     }
-    if(QObject::sender()==ui->pushButton_4)
+    if(QObject::sender()==pushButton_4)
     {
         num1=4;
     }
-    if(QObject::sender()==ui->pushButton_5)
+    if(QObject::sender()==pushButton_5)
     {
         num1=5;
     }
-    if(QObject::sender()==ui->pushButton_6)
+    if(QObject::sender()==pushButton_6)
     {
         num1=6;
     }
-    if(QObject::sender()==ui->pushButton_7)
+    if(QObject::sender()==pushButton_7)
     {
         num1=7;
     }
-    if(QObject::sender()==ui->pushButton_8)
+    if(QObject::sender()==pushButton_8)
     {
         num1=8;
     }
-    if(QObject::sender()==ui->pushButton_9)
+    if(QObject::sender()==pushButton_9)
     {
         num1=9;
     }
@@ -341,15 +494,15 @@ void MainWindow::victory(int i)
         VICTORY_PLAYER="Ничья";
     }
 
-    ui->pushButton_1->setEnabled(false);
-    ui->pushButton_2->setEnabled(false);
-    ui->pushButton_3->setEnabled(false);
-    ui->pushButton_4->setEnabled(false);
-    ui->pushButton_5->setEnabled(false);
-    ui->pushButton_6->setEnabled(false);
-    ui->pushButton_7->setEnabled(false);
-    ui->pushButton_8->setEnabled(false);
-    ui->pushButton_9->setEnabled(false);
+    pushButton_1->setEnabled(false);
+    pushButton_2->setEnabled(false);
+    pushButton_3->setEnabled(false);
+    pushButton_4->setEnabled(false);
+    pushButton_5->setEnabled(false);
+    pushButton_6->setEnabled(false);
+    pushButton_7->setEnabled(false);
+    pushButton_8->setEnabled(false);
+    pushButton_9->setEnabled(false);
 
     ui->label_score_1->setText(QString::number(score_player_1));
     ui->label_score_2->setText(QString::number(score_player_2));
