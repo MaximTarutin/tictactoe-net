@@ -7,5 +7,7 @@
         <file>res/green-balloon.gif</file>
         <file>res/soleil-sunshine.gif</file>
         <file>res/prosrach.png</file>
+        <file>res/kr.png</file>
+        <file>res/nol.png</file>
     </qresource>
 </RCC>

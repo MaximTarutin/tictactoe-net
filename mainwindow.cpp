@@ -239,15 +239,31 @@ void MainWindow::label_victory_hide()
     {
         cell[i]=10;                     // приводим массив в первоначальное состояние
     }
-    pushButton_1->setText("");
-    pushButton_2->setText("");
-    pushButton_3->setText("");
-    pushButton_4->setText("");
-    pushButton_5->setText("");
-    pushButton_6->setText("");
-    pushButton_7->setText("");
-    pushButton_8->setText("");
-    pushButton_9->setText("");
+
+    ui->label_score_1->setStyleSheet("border-image: url(:/res/prosrach.png); "
+                                     "background-color: yellow;");
+    ui->label_score_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                     "background-color: yellow;");
+    pushButton_1->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_3->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_4->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_5->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_6->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_7->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_8->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+    pushButton_9->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                "background-color: pink;");
+   // ui->label_info->setStyleSheet("border-image: url(:/res/prosrach.png);");
+
     pushButton_1->setEnabled(true); // Очищаем поле
     pushButton_2->setEnabled(true);
     pushButton_3->setEnabled(true);
@@ -335,41 +351,42 @@ void MainWindow::get_data()
 
     if(ACTIVE_PLAYER=="PLAYER_1")
     {
-        ox="x";
+        ox="border-image: url(:/res/kr.png)";
         cell[num]=1;
     } else
     {
         cell[num]=2;
-        ox="0";
+        ox="border-image: url(:/res/nol.png)";
     }
+
     switch(num)
     {
         case 1: pushButton_1->setDisabled(true);
-                pushButton_1->setText(ox);
+                pushButton_1->setStyleSheet(ox);
                 break;
         case 2: pushButton_2->setDisabled(true);
-                pushButton_2->setText(ox);
+                pushButton_2->setStyleSheet(ox);
                 break;
         case 3: pushButton_3->setDisabled(true);
-                pushButton_3->setText(ox);
+                pushButton_3->setStyleSheet(ox);
                 break;
         case 4: pushButton_4->setDisabled(true);
-                pushButton_4->setText(ox);
+                pushButton_4->setStyleSheet(ox);
                 break;
         case 5: pushButton_5->setDisabled(true);
-                pushButton_5->setText(ox);
+                pushButton_5->setStyleSheet(ox);
                 break;
         case 6: pushButton_6->setDisabled(true);
-                pushButton_6->setText(ox);
+                pushButton_6->setStyleSheet(ox);
                 break;
         case 7: pushButton_7->setDisabled(true);
-                pushButton_7->setText(ox);
+                pushButton_7->setStyleSheet(ox);
                 break;
         case 8: pushButton_8->setDisabled(true);
-                pushButton_8->setText(ox);
+                pushButton_8->setStyleSheet(ox);
                 break;
         case 9: pushButton_9->setDisabled(true);
-                pushButton_9->setText(ox);
+                pushButton_9->setStyleSheet(ox);
                 break;
     }
         check_to_victory();
