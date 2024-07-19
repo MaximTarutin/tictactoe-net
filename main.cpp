@@ -8,6 +8,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MyServer server;
     MainWindow w;
-    w.showFullScreen();
+    w.showMaximized();
     return a.exec();
 }
