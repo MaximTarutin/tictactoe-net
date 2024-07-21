@@ -9,5 +9,6 @@
         <file>res/prosrach.png</file>
         <file>res/kr.png</file>
         <file>res/nol.png</file>
+        <file>res/ok.png</file>
     </qresource>
 </RCC>

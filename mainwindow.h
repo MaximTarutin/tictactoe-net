@@ -26,6 +26,7 @@ private:
     int screen_h = 0;                                   // высота экрана
     QString namePlayer = "";                            // имя игрока
 
+    void init_players_name();                           // инициализация экрана ввода имени
     void check_name();                                  // проверяем введено ли имя игрока
 
 private slots:
