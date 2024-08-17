@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include "maxscreensize.h"
+#include "myserver.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     MaxScreenSize   *ScreenSize = nullptr;              // объект размер экрана
+    MyServer        *myserver = nullptr;
     QLabel          *Background = nullptr;              // игровой фон, центральный виджет
     QLabel          *label_name = nullptr;              // лейбл при вводе имени игрока
     QLineEdit       *lineedit_name = nullptr;           // ввод имени игрока

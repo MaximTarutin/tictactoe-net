@@ -2,18 +2,26 @@
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
+    myserver = new MyServer(this);
     ScreenSize = new MaxScreenSize();
     screen_w = ScreenSize->Screen_Width();
     screen_h = ScreenSize->Screen_Height();
+
     Background = new QLabel(this);
     Background->setStyleSheet("border-image: url(:/res/fone.jpg);");
     this->setCentralWidget(Background);
 
     init_players_name();
+    qDebug() << myserver->chek_port(21111);
+    if(myserver->chek_port(21111))
+    {
+        myserver->server_start(); // если порт свободен, то запускаем сервер
+    }
 }
 
 MainWindow::~MainWindow()
 {
+    delete myserver;
     delete Background;
     delete ScreenSize;
 }
@@ -51,6 +59,7 @@ void MainWindow::input_name_player()
         delete lineedit_name;
         delete label_name;
         delete button_name;
+        qDebug() << myserver->my_ip_address();
     }
 }
 
