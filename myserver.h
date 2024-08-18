@@ -14,12 +14,13 @@ public:
     ~MyServer();
 
     QString my_ip_address();                        // Получаем свой ip-адрес
-    void server_start();                            // Прослушиваем порт
-    bool chek_port(int port);                       // Проверка на свободность порта
+    void    server_start();                         // Прослушиваем порт 21111
     int i=0;
     QList <QTcpSocket*> clientura;
 
 private:
+    QString         ACTIVE_PLAYER="";                       // активный игрок
+    void init();                                            // Инициализация поля
 
 private slots:
     void new_connection();                          // новое соединение

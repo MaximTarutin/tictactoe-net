@@ -1,15 +1,21 @@
 #include "myserver.h"
 #include <QDataStream>
 #include <QDate>
-#include <QRegularExpression>
 
 MyServer::MyServer(QObject *parent)
     : QTcpServer{parent}
 {
-
+    init();
 }
 
 MyServer::~MyServer()
+{
+
+}
+
+// ---------------------------------- Инициализация поля -----------------------------------
+
+void MyServer::init()
 {
 
 }
@@ -23,12 +29,12 @@ void MyServer::server_start()
         qDebug() << "Сервер запущен";
         connect(this, &QTcpServer::newConnection, this, &MyServer::new_connection);             // новое подключение
 
-        // int perviy_hod = rand()%2+0;            // случайно выбираем кто ходит первый
-        // if (perviy_hod==1)                      // Первым ходит компьютер
-        // {
-        //     ACTIVE_PLAYER = "PLAYER_1";
-        // } else ACTIVE_PLAYER = "PLAYER_2";
-        // qDebug() << "Активный" << ACTIVE_PLAYER;
+        int perviy_hod = rand()%2+0;            // случайно выбираем кто ходит первый
+        if (perviy_hod==1)                      // Первым ходит компьютер
+        {
+            ACTIVE_PLAYER = "PLAYER_1";
+        } else ACTIVE_PLAYER = "PLAYER_2";
+        qDebug() << "Активный" << ACTIVE_PLAYER;
     } else
     {
         qDebug() << "Что-то пошло не так (((";
@@ -39,13 +45,55 @@ void MyServer::server_start()
 
 void MyServer::new_connection()
 {
+    int num=0;
+    static int i=0;
+    i++;
+    if(i>2) num=100;         // К серверу подключается не более 2-х клиентов, если 100 то выход
 
+    QTcpSocket* t_socket = this->nextPendingConnection();
+
+    clientura.append(t_socket);
+    qDebug() << i << &clientura[0];
+    connect(t_socket, &QTcpSocket::disconnected, t_socket, &QTcpSocket::deleteLater);       // потеря соединения
+    connect(t_socket, &QTcpSocket::readyRead, this, &MyServer::get_data);                   // получаем данные от клиента
+
+    QDataStream out(t_socket);
+    out.setVersion(QDataStream::Qt_6_5);
+
+    QString str=ACTIVE_PLAYER;
+    out << num << str;              // Рассылаем клиентам код подключения (100 - откидывает 3-го клиента) и
+                                    // имя активного игрока
 }
 
 // -------------------------------- Получаем данные и рассылаем всем игрокам -------------------------------
 
 void MyServer::get_data()
 {
+    QTcpSocket* t_socket = (QTcpSocket*)sender();   // Получаем объект сокета, который вызвал данный слот
+
+    QDataStream in(t_socket);
+    in.setVersion(QDataStream::Qt_6_5);
+    int num;
+    QString str;
+    in >> num >> str;                           // получаем данные из сокета
+    qDebug() << num << "Активный" << str;
+
+    if(num==200)
+    {   //exit(22);
+        int perviy_hod = rand()%2+0;            // случайно выбираем кто ходит первый
+        if (perviy_hod==1)                      // Первым ходит компьютер
+        {
+            str = "PLAYER_1";
+        } else str = "PLAYER_2";
+        qDebug() << "Новый активный игрок: " << str;
+    }
+
+    foreach (QTcpSocket *socket, clientura)     // Проходим по списку подключенных сокетов
+    {
+        QDataStream out(socket);
+        out.setVersion(QDataStream::Qt_6_5);
+        out << num << str;                      // отправляем всем данные
+    }
 
 }
 
@@ -62,35 +110,4 @@ QString MyServer::my_ip_address()
         }
     }
     return ipAddress;
-}
-
-// ---------------------- Проверка занятости порта в локальной сети --------------------------------
-
-bool MyServer::chek_port(int port)
-{
-    QTcpSocket *soket = new QTcpSocket(this);
-    QString ip;
-    QString myAddress = my_ip_address();
-    QStringList strList = myAddress.split(QRegularExpression("[.]"), Qt::SkipEmptyParts);
-
-    int n0 = strList[0].toInt();
-    int n1 = strList[1].toInt();
-    int n2 = strList[2].toInt();
-    int n3 = strList[3].toInt();
-
-    QString ip0 = QString::number(n0)+"."+QString::number(n1)+"."+QString::number(n2)+".";
-
-    for(int i=n3; i<=255; ++i)
-    {
-        ip = ip0+QString::number(i);
-        soket->disconnectFromHost();
-        soket->connectToHost(ip, port);
-        if (soket->waitForConnected(10))
-        {
-            delete soket;                       // Порт уже занят
-            return false;
-        }
-    }
-    delete soket;
-    return true;
 }

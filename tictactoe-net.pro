@@ -11,15 +11,16 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    maxscreensize.cpp \
-    myserver.cpp
+    myserver.cpp \
+    selectdialog.cpp
 
 HEADERS += \
     mainwindow.h \
-    maxscreensize.h \
-    myserver.h
+    myserver.h \
+    selectdialog.h
 
-FORMS +=
+FORMS += \
+    selectdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
