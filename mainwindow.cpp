@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
     srand(time(NULL));
 
+    background = new QLabel(this);
+    this->setCentralWidget(background);
+
     t_socket = new QTcpSocket(this);
     select_dialog = new SelectDialog(this);
     window_victory = new QLabel(this);
@@ -39,9 +42,35 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     green_ballon = new QLabel(this);
     movie_sun = new QMovie(":/res/soleil-sunshine.gif");
     sun = new QLabel(this);
-    label_info = new QLabel(this);
+    movie_butterfly = new QMovie(":/res/borboletas-butterflies.gif");
+    butterfly = new QLabel(this);label_info = new QLabel(this);
+    movie_butterfly_1 = new QMovie(":/res/butterfly-freedom.gif");
+    butterfly_1 = new QLabel(this);
 
-    show_field();
+    label_info->hide();
+    label_score_1->hide();
+    label_score_2->hide();
+    blue_ballon->hide();
+    butterfly->hide();
+    butterfly_1->hide();
+    green_ballon->hide();
+    sun->hide();
+    background->hide();
+    pushButton_1->hide();
+    pushButton_2->hide();
+    pushButton_3->hide();
+    pushButton_4->hide();
+    pushButton_5->hide();
+    pushButton_6->hide();
+    pushButton_7->hide();
+    pushButton_8->hide();
+    pushButton_9->hide();
+
+    select_dialog->setWindowFlag(Qt::FramelessWindowHint);
+    select_dialog->move(Screen_Width()/2-select_dialog->width()/2,
+                        Screen_Height()/2-select_dialog->height()/2);
+    select_dialog->setStyleSheet("border-image: url(:/res/prosrach.png);");
+    select_dialog->show();
 
     connect(select_dialog, &SelectDialog::select_signal, this, &MainWindow::get_signal_select); // получаем сигнал из диалога
     connect(t_socket, &QTcpSocket::readyRead, this, &MainWindow::get_data);                     // получаем данные от сервера
@@ -57,13 +86,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     connect(pushButton_9, &QPushButton::clicked, this, &MainWindow::set_playing_field);
 
     connect(timer_victory, &QTimer::timeout, this, &MainWindow::label_victory_hide);
-
-    qDebug() << Screen_Width() << "x" << Screen_Height();
-
 }
 
 MainWindow::~MainWindow()
 {
+    delete background;
     delete label_score_2;
     delete label_score_1;
     delete t_server;
@@ -84,6 +111,12 @@ MainWindow::~MainWindow()
     delete blue_ballon;
     delete movie_green_ballon;
     delete green_ballon;
+    delete sun;
+    delete movie_sun;
+    delete butterfly;
+    delete movie_butterfly;
+    delete butterfly_1;
+    delete movie_butterfly_1;
 }
 
 //------------------- Ширина экрана ------------------------------
@@ -109,17 +142,9 @@ int MainWindow::Screen_Height()
 
 void MainWindow::show_field()
 {
-    //centralWidget()->setStyleSheet("border-image: url(:/res/fone.jpg);");           // ставим фон
+    background->setStyleSheet("border-image: url(:/res/fone.jpg);");           // ставим фон
     setStyleSheet( "QMessageBox{border-image: url(:/res/prosrach.png);}"
                   "QInputDialog {border-image: url(:/res/prosrach.png);};");
-    select_dialog->setWindowFlag(Qt::FramelessWindowHint);
-    select_dialog->move(this->width()/2-select_dialog->width()/2,
-                        this->height()/2-select_dialog->height()/2);
-    select_dialog->setStyleSheet("border-image: url(:/res/prosrach.png);");
-
-    //this->centralWidget()->hide();
-    select_dialog->show();
-
     label_score_1->setStyleSheet("border-image: url(:/res/prosrach.png); "
                                      "background-color: yellow;");
     label_score_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
@@ -142,7 +167,8 @@ void MainWindow::show_field()
                                     "background-color: pink;");
     pushButton_9->setStyleSheet("border-image: url(:/res/prosrach.png);"
                                     "background-color: pink;");
-    label_info->setStyleSheet("border-image: url(:/res/prosrach.png);");
+    label_info->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                              "background-color: lightcyan;");
 
     pushButton_1->resize(Screen_Width()/20, Screen_Height()/10);
     pushButton_2->resize(Screen_Width()/20, Screen_Height()/10);
@@ -201,11 +227,46 @@ void MainWindow::show_field()
     label_score_2->move(x1_s, y1_s);
     label_score_2->resize(w_s, h_s);
 
+    label_info->move(x1+pushButton_1->width()/2, y1-h_s-25);
+    label_info->resize(x3-x1, h_s);
+    label_info->setAlignment(Qt::AlignCenter);
+
     sun->setMovie(movie_sun);
     movie_sun->start();
     movie_sun->setScaledSize(QSize(Screen_Width()/10, Screen_Height()/5));
     sun->resize(Screen_Width()/10, Screen_Height()/5);
     sun->move(Screen_Width()/25, Screen_Height()/25);
+
+    butterfly->setMovie(movie_butterfly);
+    movie_butterfly->start();
+    movie_butterfly->setScaledSize(QSize(Screen_Width()/10, Screen_Height()/5));
+    butterfly->resize(Screen_Width()/10, Screen_Height()/5);
+    butterfly->move(Screen_Width()-Screen_Width()/7, Screen_Height()-Screen_Height()/3);
+
+    butterfly_1->setMovie(movie_butterfly_1);
+    movie_butterfly_1->start();
+    movie_butterfly_1->setScaledSize(QSize(Screen_Width()/10, Screen_Height()/10));
+    butterfly_1->resize(Screen_Width()/10, Screen_Height()/10);
+    butterfly_1->move(Screen_Width()/7, Screen_Height()/3);
+
+    label_info->show();
+    label_score_1->show();
+    label_score_2->show();
+    blue_ballon->show();
+    green_ballon->show();
+    sun->show();
+    butterfly->show();
+    butterfly_1->show();
+    background->show();
+    pushButton_1->show();
+    pushButton_2->show();
+    pushButton_3->show();
+    pushButton_4->show();
+    pushButton_5->show();
+    pushButton_6->show();
+    pushButton_7->show();
+    pushButton_8->show();
+    pushButton_9->show();
 }
 
 // ----------------------------------- Инициализация поля ----------------------------------
@@ -244,6 +305,9 @@ void MainWindow::label_victory_hide()
                                      "background-color: yellow;");
     label_score_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
                                      "background-color: yellow;");
+    label_info->setStyleSheet("border-image: url(:/res/prosrach.png);"
+                                 "background-color: yellow;");
+
     pushButton_1->setStyleSheet("border-image: url(:/res/prosrach.png);"
                                 "background-color: pink;");
     pushButton_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
@@ -262,7 +326,6 @@ void MainWindow::label_victory_hide()
                                 "background-color: pink;");
     pushButton_9->setStyleSheet("border-image: url(:/res/prosrach.png);"
                                 "background-color: pink;");
-   // ui->label_info->setStyleSheet("border-image: url(:/res/prosrach.png);");
 
     pushButton_1->setEnabled(true); // Очищаем поле
     pushButton_2->setEnabled(true);
@@ -289,6 +352,7 @@ void MainWindow::get_signal_select(QString s)
         start_client();
         PLAYER_NAME="PLAYER_2";
     }
+    show_field();
 }
 
 // --------------------------- Запускаем сервер -------------------------------------------

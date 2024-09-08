@@ -79,7 +79,7 @@ void MyServer::get_data()
     qDebug() << num << "Активный" << str;
 
     if(num==200)
-    {   //exit(22);
+    {
         int perviy_hod = rand()%2+0;            // случайно выбираем кто ходит первый
         if (perviy_hod==1)                      // Первым ходит компьютер
         {

@@ -21,6 +21,7 @@ public:
     ~MainWindow();    
 
 private:
+    QLabel          *background = nullptr;
     SelectDialog    *select_dialog = nullptr;               // Диалог выбора сервер или клиент
     MyServer        *t_server = nullptr;                    // Сервер
     QTcpSocket      *t_socket = nullptr;                    // Сокет
@@ -47,9 +48,13 @@ private:
 
     QMovie          *movie_blue_ballon=nullptr;
     QMovie          *movie_green_ballon=nullptr;
+    QMovie          *movie_butterfly=nullptr;
+    QMovie          *movie_butterfly_1=nullptr;
     QMovie          *movie_sun=nullptr;
     QLabel          *blue_ballon=nullptr;
     QLabel          *green_ballon=nullptr;
+    QLabel          *butterfly=nullptr;
+    QLabel          *butterfly_1=nullptr;
 
     int cell[10]={10,10,10,10,10,10,10,10,10,10};           // Клетки поля
     int score_player_1=0;                                   // счет игрока 1
