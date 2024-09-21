@@ -9,6 +9,8 @@
 #include <QTimer>
 #include <QPushButton>
 #include <QMovie>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include "myserver.h"
 #include "selectdialog.h"
 
@@ -46,6 +48,8 @@ private:
     QPushButton     *pushButton_8=nullptr;
     QPushButton     *pushButton_9=nullptr;
 
+    QPushButton     *pushButton_exit=nullptr;
+
     QMovie          *movie_blue_ballon=nullptr;
     QMovie          *movie_green_ballon=nullptr;
     QMovie          *movie_butterfly=nullptr;
@@ -55,6 +59,9 @@ private:
     QLabel          *green_ballon=nullptr;
     QLabel          *butterfly=nullptr;
     QLabel          *butterfly_1=nullptr;
+
+    QMediaPlayer    *mediaplayer;
+    QAudioOutput    *audiooutput;
 
     int cell[10]={10,10,10,10,10,10,10,10,10,10};           // Клетки поля
     int score_player_1=0;                                   // счет игрока 1

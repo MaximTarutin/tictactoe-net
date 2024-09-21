@@ -18,6 +18,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     background = new QLabel(this);
     this->setCentralWidget(background);
 
+    mediaplayer = new QMediaPlayer;
+    audiooutput = new QAudioOutput;
+    mediaplayer->setAudioOutput(audiooutput);
+    mediaplayer->setSource(QUrl("qrc:/res-sound/1.wav"));
+    audiooutput->setVolume(100);
+
     t_socket = new QTcpSocket(this);
     select_dialog = new SelectDialog(this);
     window_victory = new QLabel(this);
@@ -32,6 +38,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     pushButton_7 = new QPushButton(this);
     pushButton_8 = new QPushButton(this);
     pushButton_9 = new QPushButton(this);
+    pushButton_exit = new QPushButton(this);
+
+    pushButton_exit->resize(80,40);
+    pushButton_exit->move(40, Screen_Height()-60);
+    pushButton_exit->setText("Выход");
 
     label_score_1 = new QLabel(this);
     label_score_2 = new QLabel(this);
@@ -84,8 +95,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     connect(pushButton_7, &QPushButton::clicked, this, &MainWindow::set_playing_field);
     connect(pushButton_8, &QPushButton::clicked, this, &MainWindow::set_playing_field);
     connect(pushButton_9, &QPushButton::clicked, this, &MainWindow::set_playing_field);
-
     connect(timer_victory, &QTimer::timeout, this, &MainWindow::label_victory_hide);
+    connect(pushButton_exit, &QPushButton::clicked, this, [](){exit(0);});
 }
 
 MainWindow::~MainWindow()
@@ -117,6 +128,9 @@ MainWindow::~MainWindow()
     delete movie_butterfly;
     delete butterfly_1;
     delete movie_butterfly_1;
+    delete pushButton_exit;
+    delete mediaplayer;
+    delete audiooutput;
 }
 
 //------------------- Ширина экрана ------------------------------
@@ -275,7 +289,7 @@ void MainWindow::init()
 {
     if(VICTORY_PLAYER=="Игрок 1")
     {
-        window_victory->setText("Победил игрок 1");
+        window_victory->setText("Победил игрок 1");        
     }
     if(VICTORY_PLAYER=="Игрок 2")
     {
@@ -295,6 +309,7 @@ void MainWindow::label_victory_hide()
 {
     window_victory->hide();
     timer_victory->stop();
+    mediaplayer->setSource(QUrl("qrc:/res-sound/1.wav"));
 
     for(int i=0; i<10; i++)
     {
@@ -385,7 +400,6 @@ void MainWindow::get_data()
     QString str;
     QString ox;             // Времянка
     in >> num >> str;
-
     if(num==200)
     {
         ACTIVE_PLAYER = str;                    // Новая игра
@@ -451,7 +465,8 @@ void MainWindow::get_data()
                 pushButton_9->setStyleSheet(ox);
                 break;
     }
-        check_to_victory();
+    mediaplayer->play();
+    check_to_victory();
 }
 
 // ------------------------ Отправка данных на сервер -----------------------------------
@@ -562,14 +577,35 @@ void MainWindow::victory(int i)
     {
         score_player_1++;
         VICTORY_PLAYER="Игрок 1";
+
+        if(ACTIVE_PLAYER==PLAYER_NAME)
+        {
+            mediaplayer->setSource(QUrl("qrc:/res-sound/4.wav"));
+            mediaplayer->play();
+        } else
+        {
+            mediaplayer->setSource(QUrl("qrc:/res-sound/2.wav"));
+            mediaplayer->play();
+        }
     }
     if(i==2)
     {
         score_player_2++;
         VICTORY_PLAYER="Игрок 2";
+        if(ACTIVE_PLAYER==PLAYER_NAME)
+        {
+            mediaplayer->setSource(QUrl("qrc:/res-sound/4.wav"));
+            mediaplayer->play();
+        } else
+        {
+            mediaplayer->setSource(QUrl("qrc:/res-sound/2.wav"));
+            mediaplayer->play();
+        }
     }
     if(i==3)
     {
+        mediaplayer->setSource(QUrl("qrc:/res-sound/3.wav"));
+        mediaplayer->play();
         VICTORY_PLAYER="Ничья";
     }
 
