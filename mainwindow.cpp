@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     srand(time(NULL));
 
     background = new QLabel(this);
+    background->setStyleSheet("border-image: url(:/res/fone.jpg);");           // ставим фон
     this->setCentralWidget(background);
 
     mediaplayer = new QMediaPlayer;
@@ -40,9 +41,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     pushButton_9 = new QPushButton(this);
     pushButton_exit = new QPushButton(this);
 
+    QFont font;
+    font.setBold(true);
+    font.setPixelSize(16);
+
     pushButton_exit->resize(80,40);
     pushButton_exit->move(40, Screen_Height()-60);
     pushButton_exit->setText("Выход");
+    pushButton_exit->setStyleSheet("background-color: red; color: blue;");
+    pushButton_exit->setFont(font);
 
     label_score_1 = new QLabel(this);
     label_score_2 = new QLabel(this);
@@ -66,7 +73,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     butterfly_1->hide();
     green_ballon->hide();
     sun->hide();
-    background->hide();
     pushButton_1->hide();
     pushButton_2->hide();
     pushButton_3->hide();
@@ -160,9 +166,17 @@ void MainWindow::show_field()
     setStyleSheet( "QMessageBox{border-image: url(:/res/prosrach.png);}"
                   "QInputDialog {border-image: url(:/res/prosrach.png);};");
     label_score_1->setStyleSheet("border-image: url(:/res/prosrach.png); "
-                                     "background-color: yellow;");
+                                     "background-color: yellow; color: blue;");
     label_score_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
-                                     "background-color: yellow;");
+                                     "background-color: yellow; color: blue;");
+    label_score_1->setAlignment(Qt::AlignTop | Qt::AlignCenter);
+    label_score_2->setAlignment(Qt::AlignTop | Qt::AlignCenter);
+    QFont font;
+    font.setItalic(false);
+    font.setPixelSize(24);
+    font.setBold(true);
+    label_score_1->setFont(font);
+    label_score_2->setFont(font);
     pushButton_1->setStyleSheet("border-image: url(:/res/prosrach.png);"
                                     "background-color: pink;");
     pushButton_2->setStyleSheet("border-image: url(:/res/prosrach.png);"
@@ -182,7 +196,9 @@ void MainWindow::show_field()
     pushButton_9->setStyleSheet("border-image: url(:/res/prosrach.png);"
                                     "background-color: pink;");
     label_info->setStyleSheet("border-image: url(:/res/prosrach.png);"
-                              "background-color: lightcyan;");
+                              "color: magenta;");
+    font.setItalic(true);
+    label_info->setFont(font);
 
     pushButton_1->resize(Screen_Width()/20, Screen_Height()/10);
     pushButton_2->resize(Screen_Width()/20, Screen_Height()/10);

@@ -3,7 +3,7 @@
  <class>SelectDialog</class>
  <widget class="QWidget" name="SelectDialog">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -31,11 +31,18 @@
      <x>30</x>
      <y>60</y>
      <width>121</width>
-     <height>25</height>
+     <height>30</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 255, 255);</string>
+    <string notr="true">background-color: rgb(85, 255, 255);
+color: rgb(0, 0, 127);</string>
    </property>
    <property name="text">
     <string>Сервер</string>
@@ -47,11 +54,18 @@
      <x>190</x>
      <y>60</y>
      <width>121</width>
-     <height>25</height>
+     <height>30</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 255, 255);</string>
+    <string notr="true">background-color: rgb(85, 255, 255);
+color: rgb(0, 0, 127);</string>
    </property>
    <property name="text">
     <string>Клиент</string>
